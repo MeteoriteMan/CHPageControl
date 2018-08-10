@@ -1,15 +1,11 @@
 # CHPageControl
-
 ---
 
 ## 效果
-
 ---
-
 ![](https://github.com/MeteoriteMan/Assets/blob/master/gif/CHPageControl-iPhone%208.gif?raw=true)
 
 ## 使用
-
 ---
 ```
     self.pageControl = [[CHPageControl alloc] init];
@@ -33,9 +29,7 @@
 
 
 ## 安装
-
 ---
-
 使用 CocoaPods 集成. 首先在podfile中
 
 >pod 'CHPageControl'
