@@ -44,14 +44,28 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
 
     self.pageControl = [[CHPageControl alloc] init];
     [self.view addSubview:self.pageControl];
+
     self.pageControl.numberOfPages = 10;
-    self.pageControl.dotDiameter = 10;
+    
+    self.pageControl.dotDiameter = 15;
+
+
     self.pageControl.magrin = 10;
+    self.pageControl.isDoc = NO;
+
     self.pageControl.normalPageColor = [UIColor redColor];
     self.pageControl.currentPageColor = [UIColor greenColor];
+
+    
+    self.pageControl.docType = CHPageControlDocTypeImage;
+//    self.pageControl.currentPageImage = [UIImage imageNamed:@"personal1"];
+//    7e3e6709c93d70cf6c8ec337f4dcd100baa12b97
+    self.pageControl.currentPageImage = [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"];
+    self.pageControl.normalPageImage = [UIImage imageNamed:@"personal2"];
+
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.collectionView);
-        make.bottom.offset(-8);
+        make.bottom.equalTo(self.mas_bottomLayoutGuide).offset(-8);
     }];
 
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:UICollectionViewCellID];

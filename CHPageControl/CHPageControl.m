@@ -8,6 +8,10 @@
 
 #import "CHPageControl.h"
 
+@interface CHPageControl ()
+
+@end
+
 @implementation CHPageControl
 
 #define DefaultDotDiameter 5
@@ -19,6 +23,18 @@
  // Drawing code
  }
  */
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self setupUI];
+    }
+    return self;
+}
+
+- (void)setupUI {
+    self.isDoc = YES;
+    
+}
 
 #pragma mark setter
 
@@ -49,40 +65,61 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
-    //计算圆点间距
-    CGFloat marginX = self.dotDiameter + self.magrin;
-
-    //计算整个pageControll的宽度
-    CGFloat newW = self.subviews.count * marginX - self.magrin;
-
-    //设置新frame
-    self.bounds = CGRectMake(0, 0, newW, self.bounds.size.height);
-
-    //设置居中
-    CGPoint center = self.center;
-    center.x = self.superview.center.x;
-    self.center = center;
-
     UIView *lastView;
     //遍历subview,设置圆点frame
     for (int i = 0; i < self.subviews.count; i++) {
-        UIImageView *dot = [self.subviews objectAtIndex:i];
-        dot.layer.cornerRadius = self.dotDiameter / 2;
+        CGFloat x = 0.0;
+        if (lastView) {
+            x = lastView.frame.origin.x + lastView.frame.size.width + self.magrin;
+        } else {
+            x = 0.0;
+        }
+        UIView *dot = [self.subviews objectAtIndex:i];
+        dot.layer.cornerRadius = self.docCornerRadius;
+        if (self.isDoc) {
+            dot.layer.cornerRadius = self.dotDiameter / 2;
+        }
         if (i == self.currentPage) {///选中颜色
-            dot.backgroundColor = self.currentPageColor;
-            [dot setFrame:CGRectMake(i * marginX, dot.frame.origin.y, self.dotDiameter, self.dotDiameter)];
+            switch (self.docType) {
+                case CHPageControlDocTypeDoc: {
+                    dot.backgroundColor = self.currentPageColor;
+                    [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
+                }
+                    break;
+                case CHPageControlDocTypeImage: {
+                    dot.layer.contents = (__bridge id _Nullable)(self.currentPageImage.CGImage);
+                    if (self.currentPageImage) {
+                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(self.currentPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(self.currentPageImage.CGImage)) * self.dotDiameter , self.dotDiameter)];
+                    } else {
+                        [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
+                    }
+                }
+                default:
+                    break;
+            }
         } else {///正常状态颜色
-            dot.backgroundColor = self.normalPageColor;
-            [dot setFrame:CGRectMake(i * marginX, dot.frame.origin.y, self.dotDiameter, self.dotDiameter)];
+            switch (self.docType) {
+                case CHPageControlDocTypeDoc: {
+                    dot.backgroundColor = self.normalPageColor;
+                    [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
+                }
+                    break;
+                case CHPageControlDocTypeImage: {
+                    dot.layer.contents = (__bridge id _Nullable)(self.normalPageImage.CGImage);
+                    if (self.normalPageImage) {
+                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(self.normalPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(self.normalPageImage.CGImage)) * self.dotDiameter, self.dotDiameter)];
+                    } else {
+                        [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
+                    }
+                }
+                default:
+                    break;
+            }
         }
-        if (i == self.subviews.count - 1) {
-            lastView = dot;
-        }
+        lastView = dot;
     }
-//    CGFloat pageContorlWith = lastView.bounds.size.width + self.dotDiameter;
-//    CGFloat pageContorlHeight = lastView.bounds.size.height;
-//    self.bounds = CGRectMake(0, 0, pageContorlWith, pageContorlHeight);
+    self.bounds = CGRectMake(0, 0, lastView.frame.origin.x + lastView.frame.size.width, self.dotDiameter);
+    lastView = nil;
 }
 
 @end
