@@ -13,10 +13,18 @@ typedef NS_ENUM(NSUInteger, CHPageControlDocType) {///指示器样式
     CHPageControlDocTypeImage,//图片
 };
 
+typedef NS_ENUM(NSUInteger, CHPageControlImageType) {///指示器图片样式
+    CHPageControlImageTypeDefault,//选中样式和非选中样式.
+    CHPageControlImageTypeArray,//根据图片数组设置
+};
+
 @interface CHPageControl : UIPageControl
 
 /// 指示器样式
 @property (nonatomic ,assign) CHPageControlDocType docType;
+
+/// 指示器图片样式.
+@property (nonatomic ,assign) CHPageControlImageType imageType;
 
 /// 是否是圆点,默认YES
 @property (nonatomic ,assign) BOOL isDoc;
@@ -38,5 +46,11 @@ typedef NS_ENUM(NSUInteger, CHPageControlDocType) {///指示器样式
 @property (nonatomic ,strong) UIImage *currentPageImage;
 /// 正常状态Page的图片
 @property (nonatomic ,strong) UIImage *normalPageImage;
+
+/// 指示器图片数组.选中状态
+@property (nonatomic ,strong) NSArray <UIImage *> *currentPageImageArray;
+
+/// 指示器图片数组.正常状态
+@property (nonatomic ,strong) NSArray <UIImage *> *normalPageImageArray;
 
 @end

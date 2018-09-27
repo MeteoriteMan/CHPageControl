@@ -47,7 +47,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
 
     self.pageControl.numberOfPages = 10;
     
-    self.pageControl.dotDiameter = 15;
+    self.pageControl.dotDiameter = 30;
 
 
     self.pageControl.magrin = 10;
@@ -62,6 +62,32 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
 //    7e3e6709c93d70cf6c8ec337f4dcd100baa12b97
     self.pageControl.currentPageImage = [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"];
     self.pageControl.normalPageImage = [UIImage imageNamed:@"personal2"];
+
+    self.pageControl.imageType = CHPageControlImageTypeArray;
+    self.pageControl.currentPageImageArray = @[
+                                               [UIImage imageNamed:@"7e3e6709c93d70cf6c8ec337f4dcd100baa12b97"] ,
+                                               [UIImage imageNamed:@"冰峰开水"],
+                                               [UIImage imageNamed:@"电脑"],
+                                               [UIImage imageNamed:@"寝室报修"],
+                                               [UIImage imageNamed:@"校园兼职"],
+                                               [UIImage imageNamed:@"校园约跑"],
+                                               [UIImage imageNamed:@"校园租赁"],
+                                               [UIImage imageNamed:@"personal1"],
+                                               [UIImage imageNamed:@"personal2"],
+                                               [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"],
+                                               ];
+    self.pageControl.normalPageImageArray = @[
+                                              [UIImage imageNamed:@"多云"],
+                                              [UIImage imageNamed:@"角标"],
+                                              [UIImage imageNamed:@"链接"],
+                                              [UIImage imageNamed:@"下拉"],
+                                              [UIImage imageNamed:@"下一步"],
+                                              [UIImage imageNamed:@"怎么玩"],
+                                              [UIImage imageNamed:@"阵雪"],
+                                              [UIImage imageNamed:@"阵雨"],
+                                              [UIImage imageNamed:@"中雪"],
+                                              [UIImage imageNamed:@"radio button_2"],
+                                              ];
 
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.collectionView);

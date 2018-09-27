@@ -87,9 +87,22 @@
                 }
                     break;
                 case CHPageControlDocTypeImage: {
-                    dot.layer.contents = (__bridge id _Nullable)(self.currentPageImage.CGImage);
-                    if (self.currentPageImage) {
-                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(self.currentPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(self.currentPageImage.CGImage)) * self.dotDiameter , self.dotDiameter)];
+                    UIImage *currentPageImage;
+                    switch (self.imageType) {
+                        case CHPageControlImageTypeDefault: {
+                            currentPageImage = self.currentPageImage;
+                        }
+                            break;
+                        case CHPageControlImageTypeArray: {
+                            NSAssert1(!(i > self.currentPageImageArray.count - 1), @"%s---currentPageImageArray中图片数小于CHPageControl的个数", __FUNCTION__);
+                            currentPageImage = self.currentPageImageArray[i];
+                        }
+                        default:
+                            break;
+                    }
+                    dot.layer.contents = (__bridge id _Nullable)(currentPageImage.CGImage);
+                    if (currentPageImage) {
+                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(currentPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(currentPageImage.CGImage)) * self.dotDiameter , self.dotDiameter)];
                     } else {
                         [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
                     }
@@ -105,9 +118,22 @@
                 }
                     break;
                 case CHPageControlDocTypeImage: {
-                    dot.layer.contents = (__bridge id _Nullable)(self.normalPageImage.CGImage);
-                    if (self.normalPageImage) {
-                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(self.normalPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(self.normalPageImage.CGImage)) * self.dotDiameter, self.dotDiameter)];
+                    UIImage *normalPageImage;
+                    switch (self.imageType) {
+                        case CHPageControlImageTypeDefault: {
+                            normalPageImage = self.normalPageImage;
+                        }
+                            break;
+                        case CHPageControlImageTypeArray: {
+                            NSAssert1(!(i > self.normalPageImageArray.count - 1), @"%s---normalPageImageArray中图片数小于CHPageControl的个数", __FUNCTION__);
+                            normalPageImage = self.normalPageImageArray[i];
+                        }
+                        default:
+                            break;
+                    }
+                    dot.layer.contents = (__bridge id _Nullable)(normalPageImage.CGImage);
+                    if (normalPageImage) {
+                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(normalPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(normalPageImage.CGImage)) * self.dotDiameter, self.dotDiameter)];
                     } else {
                         [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
                     }
