@@ -62,7 +62,6 @@
 }
 
 #pragma mark UISet
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     UIView *lastView;
@@ -70,7 +69,7 @@
     for (int i = 0; i < self.subviews.count; i++) {
         CGFloat x = 0.0;
         if (lastView) {
-            x = lastView.frame.origin.x + lastView.frame.size.width + self.magrin;
+            x = lastView.frame.origin.x + lastView.frame.size.width + self.interval;
         } else {
             x = 0.0;
         }

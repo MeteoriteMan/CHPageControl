@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, CHPageControlImageType) {///指示器图片样式
 /// 小圆点的直径
 @property (nonatomic ,assign) CGFloat dotDiameter;
 /// 小圆点之间的间距
-@property (nonatomic ,assign) CGFloat magrin;
+@property (nonatomic ,assign) CGFloat interval;
 /// 当前选中page的颜色
 @property (nonatomic ,strong) UIColor *currentPageColor;
 /// 正常状态Page的颜色

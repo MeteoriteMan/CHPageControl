@@ -50,7 +50,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     self.pageControl.dotDiameter = 30;
 
 
-    self.pageControl.magrin = 10;
+    self.pageControl.interval = 10;
     self.pageControl.isDoc = NO;
 
     self.pageControl.normalPageColor = [UIColor redColor];

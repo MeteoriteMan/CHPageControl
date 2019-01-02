@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "CHPageControl"
-    s.version      = "0.0.3"
+    s.version      = "0.0.4"
     s.summary      = "You can Use CHPageControl to change CHPageControl's interval. and a easy way to change pageContorl's propertys"
     s.homepage     = "https://github.com/MeteoriteMan/CHPageControl"
     s.license      = "MIT"
