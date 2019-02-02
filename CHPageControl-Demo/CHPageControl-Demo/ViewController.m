@@ -84,9 +84,9 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
                                               [UIImage imageNamed:@"下一步"],
                                               [UIImage imageNamed:@"怎么玩"],
                                               [UIImage imageNamed:@"阵雪"],
-                                              [UIImage imageNamed:@"阵雨"],
-                                              [UIImage imageNamed:@"中雪"],
-                                              [UIImage imageNamed:@"radio button_2"],
+//                                              [UIImage imageNamed:@"阵雨"],
+//                                              [UIImage imageNamed:@"中雪"],
+//                                              [UIImage imageNamed:@"radio button_2"],
                                               ];
 
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
