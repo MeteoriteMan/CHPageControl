@@ -7,22 +7,19 @@
 //
 
 #import "CHPageControl.h"
+#import "Masonry.h"
 
 @interface CHPageControl ()
 
 @end
 
-@implementation CHPageControl
+@implementation CHPageControl {
 
-#define DefaultDotDiameter 5
+@private BOOL needsReload;
 
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
+@private NSArray <UIImageView *> *pageControls;
+
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -32,117 +29,134 @@
 }
 
 - (void)setConfig {
-    self.defersCurrentPageDisplay = YES;
-    self.isDoc = YES;
+    needsReload = YES;
 }
 
 #pragma mark setter
 
-#pragma mark getter
-
-- (CGFloat)dotDiameter {
-    if (_dotDiameter == 0) {
-        _dotDiameter = DefaultDotDiameter;
-    }
-    return _dotDiameter;
+- (void)setNumberOfPages:(NSInteger)numberOfPages {
+    _numberOfPages = numberOfPages;
+    [self reloadData];
 }
 
-- (UIColor *)normalPageColor {
-    if (!_normalPageColor) {
-        _normalPageColor = [UIColor lightGrayColor];
-    }
-    return _normalPageColor;
-}
-
-- (UIColor *)currentPageColor {
-    if (!_currentPageColor) {
-        _currentPageColor = [UIColor darkGrayColor];
-    }
-    return _currentPageColor;
-}
-
-#pragma mark UISet
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    UIView *lastView;
-    //遍历subview,设置圆点frame
-    for (int i = 0; i < self.subviews.count; i++) {
-        CGFloat x = 0.0;
-        if (lastView) {
-            x = lastView.frame.origin.x + lastView.frame.size.width + self.interval;
+- (void)setCurrentPage:(NSInteger)currentPage {
+    _currentPage = currentPage;
+    for (int i = 0; i < self.numberOfPages; i++) {
+        UIImageView *imageView = pageControls[i];
+        if (self.docType == CHPageControlDocTypeDoc) {
+            if (i == currentPage) {
+                imageView.backgroundColor = self.currentPageIndicatorTintColor;
+            } else {
+                imageView.backgroundColor = self.pageIndicatorTintColor;
+            }
         } else {
-            x = 0.0;
-        }
-        UIView *dot = [self.subviews objectAtIndex:i];
-        dot.layer.cornerRadius = self.docCornerRadius;
-        if (self.isDoc) {
-            dot.layer.cornerRadius = self.dotDiameter / 2;
-        }
-        if (i == self.currentPage) {///选中颜色
-            switch (self.docType) {
-                case CHPageControlDocTypeDoc: {
-                    dot.backgroundColor = self.currentPageColor;
-                    [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
-                }
-                    break;
-                case CHPageControlDocTypeImage: {
-                    UIImage *currentPageImage;
-                    switch (self.imageType) {
-                        case CHPageControlImageTypeDefault: {
-                            currentPageImage = self.currentPageImage;
-                        }
-                            break;
-                        case CHPageControlImageTypeArray: {
-                            currentPageImage = self.currentPageImageArray[i % self.currentPageImageArray.count];
-                        }
-                        default:
-                            break;
-                    }
-                    dot.layer.contents = (__bridge id _Nullable)(currentPageImage.CGImage);
-                    if (currentPageImage) {
-                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(currentPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(currentPageImage.CGImage)) * self.dotDiameter , self.dotDiameter)];
-                    } else {
-                        [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
-                    }
-                }
-                default:
-                    break;
+            imageView.backgroundColor = [UIColor clearColor];
+            UIImage *image;
+            if (i == self.currentPage) {
+                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+            } else {
+                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
             }
-        } else {///正常状态颜色
-            switch (self.docType) {
-                case CHPageControlDocTypeDoc: {
-                    dot.backgroundColor = self.normalPageColor;
-                    [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
-                }
-                    break;
-                case CHPageControlDocTypeImage: {
-                    UIImage *normalPageImage;
-                    switch (self.imageType) {
-                        case CHPageControlImageTypeDefault: {
-                            normalPageImage = self.normalPageImage;
-                        }
-                            break;
-                        case CHPageControlImageTypeArray: {
-                            normalPageImage = self.normalPageImageArray[i % self.normalPageImageArray.count];
-                        }
-                        default:
-                            break;
-                    }
-                    dot.layer.contents = (__bridge id _Nullable)(normalPageImage.CGImage);
-                    if (normalPageImage) {
-                        [dot setFrame:CGRectMake(x, 0, ((CGFloat)CGImageGetWidth(normalPageImage.CGImage)) / ((CGFloat)CGImageGetHeight(normalPageImage.CGImage)) * self.dotDiameter, self.dotDiameter)];
-                    } else {
-                        [dot setFrame:CGRectMake(x, 0, self.dotDiameter, self.dotDiameter)];
-                    }
-                }
-                default:
-                    break;
-            }
+            imageView.image = image;
         }
-        lastView = dot;
+
     }
-    self.bounds = CGRectMake(0, 0, lastView.frame.origin.x + lastView.frame.size.width, self.dotDiameter);
-    lastView = nil;
+}
+
+#pragma mark getter
+- (UIColor *)pageIndicatorTintColor {
+    if (!_pageIndicatorTintColor) {
+        _pageIndicatorTintColor = [UIColor lightGrayColor];
+    }
+    return _pageIndicatorTintColor;
+}
+
+- (UIColor *)currentPageIndicatorTintColor {
+    if (!_currentPageIndicatorTintColor) {
+        _currentPageIndicatorTintColor = [UIColor darkGrayColor];
+    }
+    return _currentPageIndicatorTintColor;
+}
+
+// 重新刷新控件
+- (void)reloadData {
+    if (self.numberOfPages == 1 && self.hidesForSinglePage) {
+        self.hidden = YES;
+    } else {
+        self.hidden = NO;
+    }
+
+    for (UIView *subView in pageControls) {
+        [subView removeFromSuperview];
+    }
+    pageControls = nil;
+
+    UIView *lastView;
+    NSMutableArray *arrayM = [NSMutableArray array];
+    for (int i = 0; i < self.numberOfPages; i++) {
+        UIImageView *imageView = [[UIImageView alloc] init];
+        CGFloat multiplied;
+        if (self.docType == CHPageControlDocTypeDoc) {
+            if (i == self.currentPage) {
+                imageView.backgroundColor = self.currentPageIndicatorTintColor;
+            } else {
+                imageView.backgroundColor = self.pageIndicatorTintColor;
+            }
+            multiplied = 1.0;
+        } else {
+            UIImage *image;
+            UIImage *computeSizeImage = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+            if (i == self.currentPage) {
+                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+            } else {
+                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+            }
+            imageView.image = image;
+            multiplied = CGImageGetWidth(computeSizeImage.CGImage) / CGImageGetHeight(computeSizeImage.CGImage);
+        }
+        [self addSubview:imageView];
+        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (lastView) {
+                make.left.equalTo(lastView.mas_right).offset(self.interval);
+            } else {
+                make.left.offset(0);
+            }
+            make.height.equalTo(self);
+            make.centerY.equalTo(self);
+            make.width.equalTo(self.mas_height).multipliedBy(multiplied);
+        }];
+        [arrayM addObject:imageView];
+        lastView = imageView;
+    }
+    pageControls = arrayM.copy;
+    [lastView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.offset(0);
+    }];
+
+
+}
+
+- (void)layoutSubviews {
+    [self setNeedsReload];
+    [super layoutSubviews];
+    if (self.docType == CHPageControlDocTypeDoc) {
+        for (UIImageView *imageView in pageControls) {
+            imageView.layer.cornerRadius = imageView.bounds.size.height * .5;
+            imageView.layer.masksToBounds = YES;
+        }
+    } else {
+        for (UIImageView *imageView in pageControls) {
+            imageView.layer.cornerRadius = 0;
+            imageView.layer.masksToBounds = NO;
+        }
+    }
+}
+
+- (void)setNeedsReload {
+    if (needsReload) {
+        needsReload = NO;
+        [self reloadData];  
+    }
 }
 
 @end

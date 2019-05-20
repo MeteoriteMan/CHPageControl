@@ -26,6 +26,12 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
+    // 全局属性设置
+    [CHPageControl appearance].interval = 10;
+    [CHPageControl appearance].pageIndicatorTintColor = [UIColor redColor];
+    [CHPageControl appearance].currentPageIndicatorTintColor = [UIColor greenColor];
+    [CHPageControl appearance].docType = CHPageControlDocTypeDoc;
+
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     flowLayout.minimumLineSpacing = 0;
@@ -45,26 +51,8 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     self.pageControl = [[CHPageControl alloc] init];
     [self.view addSubview:self.pageControl];
 
-    self.pageControl.numberOfPages = 10;
-    
-    self.pageControl.dotDiameter = 30;
-
-
-    self.pageControl.interval = 10;
-    self.pageControl.isDoc = NO;
-
-    self.pageControl.normalPageColor = [UIColor redColor];
-    self.pageControl.currentPageColor = [UIColor greenColor];
-
-    
-    self.pageControl.docType = CHPageControlDocTypeImage;
-//    self.pageControl.currentPageImage = [UIImage imageNamed:@"personal1"];
-//    7e3e6709c93d70cf6c8ec337f4dcd100baa12b97
-    self.pageControl.currentPageImage = [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"];
-    self.pageControl.normalPageImage = [UIImage imageNamed:@"personal2"];
-
-    self.pageControl.imageType = CHPageControlImageTypeArray;
-    self.pageControl.currentPageImageArray = @[
+    self.pageControl.numberOfPages = 1;
+    self.pageControl.currentPageIndicatorPageImages = @[
                                                [UIImage imageNamed:@"7e3e6709c93d70cf6c8ec337f4dcd100baa12b97"] ,
                                                [UIImage imageNamed:@"冰峰开水"],
                                                [UIImage imageNamed:@"电脑"],
@@ -76,7 +64,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
                                                [UIImage imageNamed:@"personal2"],
                                                [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"],
                                                ];
-    self.pageControl.normalPageImageArray = @[
+    self.pageControl.pageIndicatorPageImages = @[
                                               [UIImage imageNamed:@"多云"],
                                               [UIImage imageNamed:@"角标"],
                                               [UIImage imageNamed:@"链接"],
@@ -89,9 +77,19 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
 //                                              [UIImage imageNamed:@"radio button_2"],
                                               ];
 
+//    self.pageControl.currentPageIndicatorPageImages = @[
+//                                                        [UIImage imageNamed:@"u=703370381,1685271557&fm=26&gp=0"]
+//                                                        ];
+//    self.pageControl.pageIndicatorPageImages = @[
+//                                                 [UIImage imageNamed:@"personal2"]
+//                                                 ];
+
     [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.collectionView);
-        make.bottom.equalTo(self.mas_bottomLayoutGuide).offset(-8);
+        make.bottom.equalTo(self.mas_bottomLayoutGuide);
+//        make.right.offset(0);
+//        make.height.offset(20);
+        make.height.offset(4);
     }];
 
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:UICollectionViewCellID];

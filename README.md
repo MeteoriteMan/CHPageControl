@@ -35,20 +35,23 @@
 
 ```
 
+## UIAppearance支持.
+
 ## 安装
 
 使用 CocoaPods 集成. 首先在podfile中
 
->pod 'CHPageControl'
+> `pod 'CHPageControl'`
 
 安装一下pod
 
->#import <CHPageControl/CHPageControl.h>
+> `#import <CHPageControl/CHPageControl.h>`
 
 ## 更新记录
 
 |版本|更新记录|
 |:--|:--|
+|0.0.6|支持AutoLayout.简化Api.设置图片可以直接在Array中设置|
 |0.0.5|图片少的情况下可以无限轮播|
 |0.0.4|上个版本错误的magrin单词更换为interval,其余无改变|
 |0.0.3|新增设置不同page的不同状态图片的设置|
