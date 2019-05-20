@@ -10,5 +10,7 @@ Pod::Spec.new do |s|
     s.source       = { :git => "https://github.com/MeteoriteMan/CHPageControl.git", :tag => s.version }
     s.source_files = "CHPageControl/*.{h,m}"
     s.frameworks   = 'Foundation', 'UIKit'
+    s.dependency 'Masonry'
+    s.requires_arc = true
 end
 
