@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, CHPageControlDocType) {///指示器样式
 @property (nonatomic ,assign) CGFloat interval;
 
 /// MARK:图片
-/// 指示器图片数组.正常状态(doc的type为image的时候需要大于0).**注意:page的大小根据pageIndicatorPageImages中对应的image来计算的**
+/// 指示器图片数组.正常状态(doc的type为image的时候需要大于0).
 @property (nullable, nonatomic ,strong) NSArray <UIImage *> *pageIndicatorPageImages;
 
 /// 指示器图片数组.选中状态(doc的type为image的时候需要大于0).

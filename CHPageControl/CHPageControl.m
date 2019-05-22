@@ -32,37 +32,6 @@
     needsReload = YES;
 }
 
-#pragma mark setter
-
-- (void)setNumberOfPages:(NSInteger)numberOfPages {
-    _numberOfPages = numberOfPages;
-    [self reloadData];
-}
-
-- (void)setCurrentPage:(NSInteger)currentPage {
-    _currentPage = currentPage;
-    for (int i = 0; i < self.numberOfPages; i++) {
-        UIImageView *imageView = pageControls[i];
-        if (self.docType == CHPageControlDocTypeDoc) {
-            if (i == currentPage) {
-                imageView.backgroundColor = self.currentPageIndicatorTintColor;
-            } else {
-                imageView.backgroundColor = self.pageIndicatorTintColor;
-            }
-        } else {
-            imageView.backgroundColor = [UIColor clearColor];
-            UIImage *image;
-            if (i == self.currentPage) {
-                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
-            } else {
-                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
-            }
-            imageView.image = image;
-        }
-
-    }
-}
-
 #pragma mark getter
 - (UIColor *)pageIndicatorTintColor {
     if (!_pageIndicatorTintColor) {
@@ -78,8 +47,47 @@
     return _currentPageIndicatorTintColor;
 }
 
+#pragma mark setter
+- (void)setNumberOfPages:(NSInteger)numberOfPages {
+    _numberOfPages = numberOfPages;
+    [self reloadData];
+}
+
+- (void)setCurrentPage:(NSInteger)currentPage {
+    _currentPage = currentPage;
+//    [self reloadData];
+    for (int i = 0; i < pageControls.count; i++) {
+        UIImageView *imageView = pageControls[i];
+        CGFloat multiplied;
+        if (self.docType == CHPageControlDocTypeDoc) {
+            if (i == self.currentPage) {
+                imageView.backgroundColor = self.currentPageIndicatorTintColor;
+            } else {
+                imageView.backgroundColor = self.pageIndicatorTintColor;
+            }
+            multiplied = 1.0;
+        } else {
+            UIImage *image;
+            if (i == self.currentPage) {
+                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+            } else {
+                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+            }
+            imageView.image = image;
+            multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+        }
+        [self addSubview:imageView];
+        [imageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(self.bounds.size.height * multiplied);
+        }];
+        [self setNeedsUpdateConstraints];
+        [self updateConstraintsIfNeeded];
+    }
+}
+
 // 重新刷新控件
 - (void)reloadData {
+    [self layoutIfNeeded];
     if (self.numberOfPages == 1 && self.hidesForSinglePage) {
         self.hidden = YES;
     } else {
@@ -105,14 +113,13 @@
             multiplied = 1.0;
         } else {
             UIImage *image;
-            UIImage *computeSizeImage = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
             if (i == self.currentPage) {
                 image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
             } else {
                 image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
             }
             imageView.image = image;
-            multiplied = CGImageGetWidth(computeSizeImage.CGImage) / CGImageGetHeight(computeSizeImage.CGImage);
+            multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
         }
         [self addSubview:imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -123,7 +130,7 @@
             }
             make.height.equalTo(self);
             make.centerY.equalTo(self);
-            make.width.equalTo(self.mas_height).multipliedBy(multiplied);
+            make.width.offset(self.bounds.size.height * multiplied);
         }];
         [arrayM addObject:imageView];
         lastView = imageView;
@@ -132,8 +139,6 @@
     [lastView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.offset(0);
     }];
-
-
 }
 
 - (void)layoutSubviews {

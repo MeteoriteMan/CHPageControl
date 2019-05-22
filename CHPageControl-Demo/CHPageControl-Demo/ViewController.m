@@ -30,7 +30,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     [CHPageControl appearance].interval = 10;
     [CHPageControl appearance].pageIndicatorTintColor = [UIColor redColor];
     [CHPageControl appearance].currentPageIndicatorTintColor = [UIColor greenColor];
-    [CHPageControl appearance].docType = CHPageControlDocTypeDoc;
+    [CHPageControl appearance].docType = CHPageControlDocTypeImage;
 
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -51,7 +51,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     self.pageControl = [[CHPageControl alloc] init];
     [self.view addSubview:self.pageControl];
 
-    self.pageControl.numberOfPages = 1;
+    self.pageControl.numberOfPages = 10;
     self.pageControl.currentPageIndicatorPageImages = @[
                                                [UIImage imageNamed:@"7e3e6709c93d70cf6c8ec337f4dcd100baa12b97"] ,
                                                [UIImage imageNamed:@"冰峰开水"],
@@ -88,8 +88,8 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
         make.centerX.equalTo(self.collectionView);
         make.bottom.equalTo(self.mas_bottomLayoutGuide);
 //        make.right.offset(0);
-//        make.height.offset(20);
-        make.height.offset(4);
+        make.height.offset(20);
+//        make.height.offset(4);
     }];
 
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:UICollectionViewCellID];
