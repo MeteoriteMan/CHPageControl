@@ -15,14 +15,14 @@ typedef NS_ENUM(NSUInteger, CHPageControlDocType) {///指示器样式
 
 @interface CHPageControl : UIView
 
-/// 指示器样式
+/// 指示器样式.这个不支持appearance
 @property (nonatomic ,assign) CHPageControlDocType docType;
 
 /// 多少个page
-@property(nonatomic) NSInteger numberOfPages;          // default is 0
+@property(nonatomic) NSInteger numberOfPages;
 
 /// 当前的page
-@property(nonatomic) NSInteger currentPage;            // default is 0. value pinned to 0..numberOfPages-1
+@property(nonatomic) NSInteger currentPage;
 
 /// 当只有一个Page的时候隐藏
 @property(nonatomic) BOOL hidesForSinglePage;
@@ -37,10 +37,10 @@ typedef NS_ENUM(NSUInteger, CHPageControlDocType) {///指示器样式
 @property (nonatomic ,assign) CGFloat interval;
 
 /// MARK:图片
-/// 指示器图片数组.正常状态(doc的type为image的时候需要大于0).
+/// 指示器图片数组.正常状态.
 @property (nullable, nonatomic ,strong) NSArray <UIImage *> *pageIndicatorPageImages;
 
-/// 指示器图片数组.选中状态(doc的type为image的时候需要大于0).
+/// 指示器图片数组.选中状态.
 @property (nullable, nonatomic ,strong) NSArray <UIImage *> *currentPageIndicatorPageImages;
 
 @end

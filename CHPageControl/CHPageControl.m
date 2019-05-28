@@ -19,6 +19,10 @@
 
 @private NSArray <UIImageView *> *pageControls;
 
+@private UIColor *_pageIndicatorTintColor;
+
+@private UIColor *_currentPageIndicatorTintColor;
+
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -55,7 +59,6 @@
 
 - (void)setCurrentPage:(NSInteger)currentPage {
     _currentPage = currentPage;
-//    [self reloadData];
     for (int i = 0; i < pageControls.count; i++) {
         UIImageView *imageView = pageControls[i];
         CGFloat multiplied;
@@ -69,12 +72,25 @@
         } else {
             UIImage *image;
             if (i == self.currentPage) {
-                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+                if (self.currentPageIndicatorPageImages.count != 0) {
+                    imageView.backgroundColor = [UIColor clearColor];
+                    image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+                    multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+                } else {
+                    imageView.backgroundColor = self.currentPageIndicatorTintColor;
+                    multiplied = 1.0;
+                }
             } else {
-                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+                if (self.pageIndicatorPageImages.count != 0) {
+                    imageView.backgroundColor = [UIColor clearColor];
+                    image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+                    multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+                } else {
+                    imageView.backgroundColor = self.pageIndicatorTintColor;
+                    multiplied = 1.0;
+                }
             }
             imageView.image = image;
-            multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
         }
         [self addSubview:imageView];
         [imageView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -83,6 +99,40 @@
         [self setNeedsUpdateConstraints];
         [self updateConstraintsIfNeeded];
     }
+}
+
+- (void)setHidesForSinglePage:(BOOL)hidesForSinglePage {
+    _hidesForSinglePage = hidesForSinglePage;
+    if (hidesForSinglePage && self.numberOfPages == 1) {
+        self.hidden = YES;
+    } else {
+        self.hidden = NO;
+    }
+}
+
+- (void)setPageIndicatorTintColor:(UIColor *)pageIndicatorTintColor {
+    _pageIndicatorTintColor = pageIndicatorTintColor;
+    [self reloadData];
+}
+
+- (void)setCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor {
+    _currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+    [self reloadData];
+}
+
+- (void)setInterval:(CGFloat)interval {
+    _interval = interval;
+    [self reloadData];
+}
+
+- (void)setPageIndicatorPageImages:(NSArray<UIImage *> *)pageIndicatorPageImages {
+    _pageIndicatorPageImages = pageIndicatorPageImages;
+    [self reloadData];
+}
+
+- (void)setCurrentPageIndicatorPageImages:(NSArray<UIImage *> *)currentPageIndicatorPageImages {
+    _currentPageIndicatorPageImages = currentPageIndicatorPageImages;
+    [self reloadData];
 }
 
 // 重新刷新控件
@@ -114,12 +164,26 @@
         } else {
             UIImage *image;
             if (i == self.currentPage) {
-                image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+                if (self.currentPageIndicatorPageImages.count != 0) {
+                    imageView.backgroundColor = [UIColor clearColor];
+                    image = self.currentPageIndicatorPageImages[i % self.currentPageIndicatorPageImages.count];
+                    multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+                } else {
+                    imageView.backgroundColor = self.currentPageIndicatorTintColor;
+                    multiplied = 1.0;
+                }
             } else {
-                image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+                if (self.pageIndicatorPageImages.count != 0) {
+                    imageView.backgroundColor = [UIColor clearColor];
+                    image = self.pageIndicatorPageImages[i % self.pageIndicatorPageImages.count];
+                    multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+                } else {
+                    imageView.backgroundColor = self.pageIndicatorTintColor;
+                    multiplied = 1.0;
+                }
             }
             imageView.image = image;
-            multiplied = (CGFloat)(CGImageGetWidth(image.CGImage)) / (CGFloat)(CGImageGetHeight(image.CGImage));
+
         }
         [self addSubview:imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -30,7 +30,8 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     [CHPageControl appearance].interval = 10;
     [CHPageControl appearance].pageIndicatorTintColor = [UIColor redColor];
     [CHPageControl appearance].currentPageIndicatorTintColor = [UIColor greenColor];
-    [CHPageControl appearance].docType = CHPageControlDocTypeImage;
+//    /// 这个不能设置,会有BUG
+//    [CHPageControl appearance].docType = CHPageControlDocTypeImage;
 
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -49,6 +50,7 @@ static NSString *UICollectionViewCellID = @"UICollectionViewCellID";
     }];
 
     self.pageControl = [[CHPageControl alloc] init];
+    self.pageControl.docType = CHPageControlDocTypeImage;
     [self.view addSubview:self.pageControl];
 
     self.pageControl.numberOfPages = 10;
